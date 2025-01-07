@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DNS and Mail System Overview</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.5;
+        margin: 20px;
+        background: #f5f5f5;
+    }
+
+    h1, h2, h3 {
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    h2 {
+        margin-top: 40px;
+        border-bottom: 2px solid #333;
+        padding-bottom: 5px;
+    }
+
+    h3 {
+        margin-top: 20px;
+    }
+
+    section {
+        background: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    ul {
+        list-style: circle;
+        margin-left: 40px;
+    }
+
+    code {
+        background: #eee;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-family: Consolas, monospace;
+    }
+</style>
+</head>
+<body>
+
+<h1>DNS and Mail System Overview</h1>
+
+<section id="dns-system">
+    <h2>1. DNS System</h2>
+
+    <h3>1.1. List of Top-Level Domains (TLDs)</h3>
+    <p>Top-Level Domains (TLDs) are the highest level in the Domain Name System hierarchy and appear at the end of a domain name:</p>
+    <ul>
+        <li><strong>Generic TLDs (gTLDs)</strong>: .com, .org, .net, .info, .edu, etc.</li>
+        <li><strong>Country Code TLDs (ccTLDs)</strong>: .uk, .de, .fr, .jp, etc.</li>
+        <li><strong>New gTLDs</strong>: .xyz, .online, .app, etc.</li>
+    </ul>
+
+    <h3>1.2. Hierarchical Structure of the DNS</h3>
+    <p>The Domain Name System (DNS) is arranged in a hierarchical structure:</p>
+    <ul>
+        <li><strong>Root Level</strong>: Represented by "." and managed by root servers.</li>
+        <li><strong>Top-Level Domains (TLDs)</strong>: For example, .com, .org, .uk.</li>
+        <li><strong>Second-Level Domains</strong>: Under a TLD, e.g., example.com.</li>
+        <li><strong>Subdomains</strong>: Under a second-level domain, e.g., www.example.com.</li>
+    </ul>
+    <p>When a client requests a domain, DNS resolvers check their cache or query up the chain: local DNS → root servers → TLD servers → authoritative name servers.</p>
+    <p><strong>DNS Delegation</strong>: Responsibility passes down each level of the hierarchy. The root delegates to TLDs, TLDs delegate to second-level domains, and so on.</p>
+
+    <h3>1.3. DNS Records, DNS and Reverse DNS</h3>
+    <p>DNS servers store various DNS records:</p>
+    <ul>
+        <li><strong>A/AAAA</strong>: Map a domain to an IPv4/IPv6 address.</li>
+        <li><strong>CNAME</strong>: Alias one domain name to another.</li>
+        <li><strong>MX</strong>: Specify mail servers handling email for a domain.</li>
+        <li><strong>NS</strong>: Indicate authoritative name servers for a domain.</li>
+        <li><strong>TXT</strong>: Arbitrary text data, often for security/verifications (e.g., SPF).</li>
+    </ul>
+    <p><strong>Reverse DNS</strong>: Maps an IP address back to a domain name using PTR records, commonly used to verify email server authenticity.</p>
+
+    <h3>1.4. Authoritative vs. Non-Authoritative Answers</h3>
+    <p><strong>Authoritative Answers</strong>: Directly from the DNS server that holds the domain’s DNS data.</p>
+    <p><strong>Non-Authoritative Answers</strong>: From a DNS resolver’s cache or another non-authoritative source, potentially out-of-date.</p>
+
+    <h3>1.5. DNS Resolver, DNS Cache, and /etc/hosts</h3>
+    <p><strong>DNS Resolver</strong>: The component (often a local or ISP-provided server) that queries DNS records on behalf of clients.</p>
+    <p><strong>DNS Cache</strong>: Stores DNS query results temporarily to speed up future lookups until the TTL expires.</p>
+    <p><strong>/etc/hosts</strong>: A local file that can map hostnames to IP addresses before DNS queries are made.</p>
+</section>
+
+<section id="mail-system">
+    <h2>2. Mail System</h2>
+
+    <h3>2.1. Protocols: POP3, IMAP, SMTP, Client-Server Communication</h3>
+    <p><strong>SMTP (Simple Mail Transfer Protocol)</strong>: Used for sending emails from clients to servers and between mail servers.</p>
+    <p><strong>POP3 (Post Office Protocol v3)</strong>: Downloads messages from the server to the client’s machine, often removing them from the server.</p>
+    <p><strong>IMAP (Internet Message Access Protocol)</strong>: Synchronizes mail between client and server, supports multiple folders, and keeps mail on the server.</p>
+    <p>Basic commands:
+    <ul>
+        <li><strong>SMTP</strong>: <code>HELO</code>, <code>MAIL FROM:</code>, <code>RCPT TO:</code>, <code>DATA</code>, <code>QUIT</code></li>
+        <li><strong>POP3</strong>: <code>USER</code>, <code>PASS</code>, <code>LIST</code>, <code>RETR</code>, <code>DELE</code></li>
+        <li><strong>IMAP</strong>: <code>LOGIN</code>, <code>SELECT</code>, <code>FETCH</code>, <code>STORE</code>, <code>LOGOUT</code></li>
+    </ul>
+    </p>
+
+    <h3>2.2. NNTP Protocol</h3>
+    <p><strong>NNTP (Network News Transfer Protocol)</strong>: Used for reading and posting articles to Usenet newsgroups. Less common now, but historically significant for distributed discussion boards.</p>
+
+    <h3>2.3. E-mail Mailbox, Parameters, Aliases, Address</h3>
+    <p><strong>Mailbox</strong>: Stores a user’s incoming messages on the server.</p>
+    <p><strong>Aliases</strong>: Alternative addresses that deliver mail to the same mailbox, e.g., info@example.com → john@example.com.</p>
+    <p><strong>E-mail Address</strong>: Format is <code>local-part@domain</code>, e.g., john.doe@example.com.</p>
+
+    <h3>2.4. E-mail Structure: Header, Separator</h3>
+    <p>An email consists of:
+    <ul>
+        <li><strong>Headers</strong>: Metadata like <code>From:</code>, <code>To:</code>, <code>Subject:</code>, <code>Date:</code></li>
+        <li><strong>Body</strong>: The main content. Headers and body are separated by a blank line.</li>
+    </ul>
+    </p>
+
+    <h3>2.5. Attachments, E-mail Coding, MIME</h3>
+    <p><strong>Attachments</strong>: Files sent with an email, encoded for safe transmission.</p>
+    <p><strong>MIME (Multipurpose Internet Mail Extensions)</strong>: Standard for sending non-ASCII text and binary data like images or PDFs. Defines <code>Content-Type</code> and <code>Content-Transfer-Encoding</code>.</p>
+    <p><strong>E-mail Coding</strong>: Techniques like Base64 or Quoted-Printable ensure attachments and non-ASCII text can be transmitted over text-only protocols.</p>
+
+    <h3>2.6. Mailing Lists, E-mail Gate</h3>
+    <p><strong>Mailing Lists</strong>: Allow group distribution of emails to multiple subscribers via a single address.</p>
+    <p><strong>E-mail Gate (Gateway)</strong>: Converts or routes emails between different systems or formats, bridging otherwise incompatible services.</p>
+
+    <h3>2.7. E-mail Security: SSL, TLS, PGP, Signature</h3>
+    <p><strong>SSL/TLS</strong>: Encrypts email transmission (e.g., SMTPS, IMAPS, POP3S) to protect against interception.</p>
+    <p><strong>PGP (Pretty Good Privacy)</strong>: Encrypts and signs email content to ensure confidentiality and authenticity.</p>
+    <p><strong>Digital Signatures</strong>: Verify message integrity and that the message originates from the stated sender.</p>
+
+    <h3>2.8. Spam, Blacklists, Graylists, Spam Filtering</h3>
+    <p><strong>Spam</strong>: Unsolicited bulk email, often commercial or malicious.</p>
+    <p><strong>Blacklists</strong>: Lists of known spammers or malicious IPs used to block or filter email.</p>
+    <p><strong>Graylists</strong>: Temporarily reject messages from unfamiliar senders; legitimate servers retry, spam bots often do not, reducing spam.</p>
+    <p><strong>Spam Filtering</strong>: Automated classification of messages as spam or not, possibly using heuristics, Bayesian filters, or reputation services.</p>
+</section>
+ 
+<h2>Practical part</h2>
+ <h4>2.1.1 and 2.1.2.1:</h4>
+<img src="2.1.1.png" alt="2.1.1.png">
+ <h4>2.1.2.2:</h4>
+<img src="2.1.2.png" alt="2.1.2.png">
+<h4>2.1.2.3:</h4>
+<img src="2.1.3.png" alt="2.1.3.png">
+<h4>2.1.2.4:</h4>
+<img src="2.1.4.png" alt="2.1.4.png">
+<h4>2.1.2.5:</h4>
+<img src="2.1.5.png" alt="2.1.5.png">
+<h4>2.1.2.6:</h4>
+<img src="2.1.66.png" alt="2.1.6.png">
+<h4>2.2.1:</h4>
+<img src="2.2.1.png" alt="2.2.1.png">
+<h4>2.2.2.1:</h4>
+<img src="2.2.2.png" alt="2.2.2.png">
+<h4>2.2.2.2:</h4>
+<img src="2.2.3.png" alt="2.2.3.png">
+<h4>2.2.2.3:</h4>
+<img src="2.2.4.png" alt="2.2.4.png">
+<h4>2.2.2.4:</h4>
+<img src="2.2.5.png" alt="2.2.5.png">
+
+
+</body>
+</html>
+
